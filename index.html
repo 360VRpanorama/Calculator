@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flooring Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background-color: #f9f9f9; /* Light background for vibrancy */
+        }
+        h1 {
+            text-align: center;
+            color: #ff6f20; /* Orange color for headings */
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            text-align: left;
+            width: 100%;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px;
+            background-color: #ff6f20; /* Orange button color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s; /* Smooth transition */
+        }
+        button:hover {
+            background-color: #e65c1b; /* Darker shade on hover */
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .credit {
+            position: relative; /* Changed from absolute to relative */
+            text-align: center; /* Centered the text */
+            font-size: 12px;
+            color: #555; /* Subtle color for credit */
+            margin-top: 20px; /* Added margin for spacing */
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+                margin: 10px;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Flooring Calculator</h1>
+<label for="area">Desired Area (sqft):</label>
+<input type="number" id="area" placeholder="Enter area in sqft" required>
+
+<label for="boxCoverage">Box Coverage (sqft):</label>
+<input type="number" id="boxCoverage" placeholder="Enter box coverage in sqft" required>
+
+<label for="boxCost">Cost of One Box:</label>
+<input type="number" id="boxCost" placeholder="Enter cost of one box" required>
+
+<button onclick="calculateBoxes()">Calculate Costs</button>
+
+<div class="result" id="result"></div>
+
+<div class="credit">Credit: Ankit Verma</div> <!-- Credit for Flooring Calculator -->
+
+<h1>Carpet Calculator</h1>
+<label for="width">Width (ft):</label>
+<input type="number" id="width" placeholder="Enter width in ft" required>
+
+<label for="length">Length (ft):</label>
+<input type="number" id="length" placeholder="Enter length in ft" required>
+
+<label for="pricePerSqft">Price per sqft:</label>
+<input type="number" id="pricePerSqft" placeholder="Enter price per sqft" required>
+
+<button onclick="calculateCarpet()">Calculate Carpet Costs</button>
+
+<div class="result" id="carpetResult"></div>
+
+<div class="credit">Credit: Ankit Verma</div> <!-- Credit for Carpet Calculator -->
+
+<h1>Blinds Cutting Calculator</h1>
+<label for="originalWidth">Original Width (inches):</label>
+<input type="number" id="originalWidth" placeholder="Enter original width in inches" required>
+
+<label for="desiredWidth">Desired Width (inches):</label>
+<input type="number" id="desiredWidth" placeholder="Enter desired width in inches" required>
+
+<button onclick="calculateBlinds()">Calculate Deduction</button>
+
+<div class="result" id="blindsResult"></div>
+
+<div class="credit">Credit: Ankit Verma</div> <!-- Credit for Blinds Cutting Calculator -->
+
+<script>
+    function calculateBoxes() {
+        const area = parseFloat(document.getElementById('area').value);
+        const boxCoverage = parseFloat(document.getElementById('boxCoverage').value);
+        const boxCost = parseFloat(document.getElementById('boxCost').value);
+        
+        if (isNaN(area) || isNaN(boxCoverage) || isNaN(boxCost) || area <= 0 || boxCoverage <= 0 || boxCost < 0) {
+            document.getElementById('result').innerText = "Please enter valid positive numbers.";
+            return;
+        }
+
+        const boxesNeeded = Math.ceil(area / boxCoverage);
+        const totalCostBeforeTax = boxesNeeded * boxCost;
+        const totalCostAfterTax = totalCostBeforeTax * 1.13; // Adding 13% tax
+
+        document.getElementById('result').innerHTML = `
+            Boxes Needed: ${boxesNeeded}<br>
+            Total Cost Before Tax: $${totalCostBeforeTax.toFixed(2)}<br>
+            Total Cost After Tax (13%): $${totalCostAfterTax.toFixed(2)}
+        `;
+    }
+
+    function calculateCarpet() {
+        const width = parseFloat(document.getElementById('width').value);
+        const length = parseFloat(document.getElementById('length').value);
+        const pricePerSqft = parseFloat(document.getElementById('pricePerSqft').value);
+        
+        if (isNaN(width) || isNaN(length) || isNaN(pricePerSqft) || width <= 0 || length <= 0 || pricePerSqft < 0) {
+            document.getElementById('carpetResult').innerText = "Please enter valid positive numbers.";
+            return;
+        }
+
+        const totalAreaSqft = width * length;
+        const totalAreaSqYd = totalAreaSqft / 9; // Convert sqft to sq yd
+        const totalCostBeforeTax = totalAreaSqft * pricePerSqft;
+        const totalCostAfterTax = totalCostBeforeTax * 1.13; // Adding 13% tax
+
+        document.getElementById('carpetResult').innerHTML = `
+            Total Area: ${totalAreaSqft.toFixed(2)} sqft (${totalAreaSqYd.toFixed(2)} sq yd)<br>
+            Total Cost Before Tax: $${totalCostBeforeTax.toFixed(2)}<br>
+            Total Cost After Tax (13%): $${totalCostAfterTax.toFixed(2)}
+        `;
+    }
+
+    function calculateBlinds() {
+        const originalWidth = parseFloat(document.getElementById('originalWidth').value);
+        const desiredWidth = parseFloat(document.getElementById('desiredWidth').value);
+        
+        if (isNaN(originalWidth) || isNaN(desiredWidth) || originalWidth <= 0 || desiredWidth <= 0) {
+            document.getElementById('blindsResult').innerText = "Please enter valid positive numbers.";
+            return;
+        }
+
+        const totalDeduction = originalWidth - desiredWidth; // Total deduction needed
+        const deductionPerSide = totalDeduction / 2; // Deduction from each side
+
+        if (totalDeduction < 0) {
+            document.getElementById('blindsResult').innerText = "Desired width cannot be greater than original width.";
+            return;
+        }
+
+        document.getElementById('blindsResult').innerHTML = `
+            Total Deduction Needed: ${totalDeduction} inches<br>
+            Width to Deduct from Each Side: ${deductionPerSide} inches
+        `;
+    }
+</script>
+
+</body>
+</html>
