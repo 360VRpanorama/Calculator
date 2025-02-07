@@ -3,188 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flooring Calculator</title>
+    <title>Floor Area, Carpet, and Blind Size Calculator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 0;
             padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            max-width: 400px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            background-color: #f9f9f9; /* Light background for vibrancy */
         }
         h1 {
             text-align: center;
-            color: #ff6f20; /* Orange color for headings */
+            color: #F96302; /* Home Depot Orange */
         }
         label {
             display: block;
             margin: 10px 0 5px;
-            text-align: left;
-            width: 100%;
         }
         input {
+            margin: 10px 0;
+            padding: 10px;
             width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
         button {
-            padding: 10px;
-            background-color: #ff6f20; /* Orange button color */
+            padding: 10px 15px;
+            background-color: #F96302; /* Home Depot Orange */
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 4px;
             cursor: pointer;
             width: 100%;
-            transition: background-color 0.3s; /* Smooth transition */
         }
         button:hover {
-            background-color: #e65c1b; /* Darker shade on hover */
+            background-color: #D75B00; /* Darker shade of Home Depot Orange */
         }
         .result {
             margin-top: 20px;
-            font-weight: bold;
+            padding: 10px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+        }
+        .circle {
+            display: inline-block;
+            width: 30px; /* Default size */
+            height: 30px; /* Default size */
+            border-radius: 50%;
+            background-color: #F96302; /* Home Depot Orange */
+            color: white;
             text-align: center;
-        }
-        .credit {
-            position: relative; /* Changed from absolute to relative */
-            text-align: center; /* Centered the text */
-            font-size: 12px;
-            color: #555; /* Subtle color for credit */
-            margin-top: 20px; /* Added margin for spacing */
-        }
-
-        /* Responsive Styles */
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-                margin: 10px;
-                max-width: 100%;
-            }
+            line-height: 30px; /* Center text vertically */
+            font-size: 16px; /* Keep font size consistent */
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h1>Floor Area Calculator</h1>
+        <form id="floorCalculator">
+            <label for="area">Area in sqft:</label>
+            <input type="number" id="area" required>
+            <label for="boxCoverage">Box Coverage in sqft:</label>
+            <input type="number" id="boxCoverage" required>
+            <label for="boxCost">Cost per Box:</label>
+            <input type="number" id="boxCost" required>
+            <button type="button" onclick="calculateFloor()">Calculate</button>
+        </form>
+        <div class="result" id="floorResult"></div>
 
-<h1>Flooring Calculator</h1>
-<label for="area">Desired Area (sqft):</label>
-<input type="number" id="area" placeholder="Enter area in sqft" required>
+        <h1>Carpet Calculator</h1>
+        <form id="carpetCalculator">
+            <label for="width">Width in ft:</label>
+            <input type="number" id="width" required>
+            <label for="length">Length in ft:</label>
+            <input type="number" id="length" required>
+            <label for="carpetCost">Price per sqft:</label>
+            <input type="number" id="carpetCost" required>
+            <button type="button" onclick="calculateCarpet()">Calculate</button>
+        </form>
+        <div class="result" id="carpetResult"></div>
 
-<label for="boxCoverage">Box Coverage (sqft):</label>
-<input type="number" id="boxCoverage" placeholder="Enter box coverage in sqft" required>
+        <h1>Blind Size Calculator</h1>
+        <form id="blindCalculator">
+            <label for="originalWidth">Original Width in inches:</label>
+            <input type="number" id="originalWidth" required>
+            <label for="customWidth">Custom Width in inches:</label>
+            <input type="number" id="customWidth" required>
+            <button type="button" onclick="calculateBlind()">Calculate</button>
+        </form>
+        <div class="result" id="blindResult"></div>
+    </div>
 
-<label for="boxCost">Cost of One Box:</label>
-<input type="number" id="boxCost" placeholder="Enter cost of one box" required>
+    <script>
+        function calculateFloor() {
+            const area = parseFloat(document.getElementById('area').value);
+            const boxCoverage = parseFloat(document.getElementById('boxCoverage').value);
+            const boxCost = parseFloat(document.getElementById('boxCost').value);
 
-<button onclick="calculateBoxes()">Calculate Costs</button>
+            const numberOfBoxes = Math.ceil(area / boxCoverage);
+            const totalCostBeforeTax = numberOfBoxes * boxCost;
+            const totalCostAfterTax = totalCostBeforeTax * 1.13;
 
-<div class="result" id="result"></div>
-
-<div class="credit">Credit: Ankit Verma</div> <!-- Credit for Flooring Calculator -->
-
-<h1>Carpet Calculator</h1>
-<label for="width">Width (ft):</label>
-<input type="number" id="width" placeholder="Enter width in ft" required>
-
-<label for="length">Length (ft):</label>
-<input type="number" id="length" placeholder="Enter length in ft" required>
-
-<label for="pricePerSqft">Price per sqft:</label>
-<input type="number" id="pricePerSqft" placeholder="Enter price per sqft" required>
-
-<button onclick="calculateCarpet()">Calculate Carpet Costs</button>
-
-<div class="result" id="carpetResult"></div>
-
-<div class="credit">Credit: Ankit Verma</div> <!-- Credit for Carpet Calculator -->
-
-<h1>Blinds Cutting Calculator</h1>
-<label for="originalWidth">Original Width (inches):</label>
-<input type="number" id="originalWidth" placeholder="Enter original width in inches" required>
-
-<label for="desiredWidth">Desired Width (inches):</label>
-<input type="number" id="desiredWidth" placeholder="Enter desired width in inches" required>
-
-<button onclick="calculateBlinds()">Calculate Deduction</button>
-
-<div class="result" id="blindsResult"></div>
-
-<div class="credit">Credit: Ankit Verma</div> <!-- Credit for Blinds Cutting Calculator -->
-
-<script>
-    function calculateBoxes() {
-        const area = parseFloat(document.getElementById('area').value);
-        const boxCoverage = parseFloat(document.getElementById('boxCoverage').value);
-        const boxCost = parseFloat(document.getElementById('boxCost').value);
-        
-        if (isNaN(area) || isNaN(boxCoverage) || isNaN(boxCost) || area <= 0 || boxCoverage <= 0 || boxCost < 0) {
-            document.getElementById('result').innerText = "Please enter valid positive numbers.";
-            return;
+            document.getElementById('floorResult').innerHTML = `
+                <h2>Results:</h2>
+                <p>Number of Boxes Needed: <span class="circle">${numberOfBoxes}</span></p>
+                <p>Total Cost Before Tax: <strong>$${totalCostBeforeTax.toFixed(2)}</strong></p>
+                <p>Total Cost After Tax (13%): <strong>$${totalCostAfterTax.toFixed(2)}</strong></p>
+            `;
         }
 
-        const boxesNeeded = Math.ceil(area / boxCoverage);
-        const totalCostBeforeTax = boxesNeeded * boxCost;
-        const totalCostAfterTax = totalCostBeforeTax * 1.13; // Adding 13% tax
+        function calculateCarpet() {
+            const width = parseFloat(document.getElementById('width').value);
+            const length = parseFloat(document.getElementById('length').value);
+            const carpetCost = parseFloat(document.getElementById('carpetCost').value);
 
-        document.getElementById('result').innerHTML = `
-            Boxes Needed: ${boxesNeeded}<br>
-            Total Cost Before Tax: $${totalCostBeforeTax.toFixed(2)}<br>
-            Total Cost After Tax (13%): $${totalCostAfterTax.toFixed(2)}
-        `;
-    }
+            const areaSqft = width * length;
+            const areaSqyd = areaSqft / 9;
+            const totalCostBeforeTax = areaSqft * carpetCost;
+            const totalCostAfterTax = totalCostBeforeTax * 1.13;
 
-    function calculateCarpet() {
-        const width = parseFloat(document.getElementById('width').value);
-        const length = parseFloat(document.getElementById('length').value);
-        const pricePerSqft = parseFloat(document.getElementById('pricePerSqft').value);
-        
-        if (isNaN(width) || isNaN(length) || isNaN(pricePerSqft) || width <= 0 || length <= 0 || pricePerSqft < 0) {
-            document.getElementById('carpetResult').innerText = "Please enter valid positive numbers.";
-            return;
+            document.getElementById('carpetResult').innerHTML = `
+                <h2>Results:</h2>
+                <p>Area in sqft: <strong>${areaSqft.toFixed(2)}</strong></p>
+                <p>Area in sqyd: <strong>${areaSqyd.toFixed(2)}</strong></p>
+                <p>Total Cost Before Tax: <strong>$${totalCostBeforeTax.toFixed(2)}</strong></p>
+                <p>Total Cost After Tax (13%): <strong>$${totalCostAfterTax.toFixed(2)}</strong></p>
+            `;
         }
 
-        const totalAreaSqft = width * length;
-        const totalAreaSqYd = totalAreaSqft / 9; // Convert sqft to sq yd
-        const totalCostBeforeTax = totalAreaSqft * pricePerSqft;
-        const totalCostAfterTax = totalCostBeforeTax * 1.13; // Adding 13% tax
+        function calculateBlind() {
+            const originalWidth = parseFloat(document.getElementById('originalWidth').value);
+            const customWidth = parseFloat(document.getElementById('customWidth').value);
 
-        document.getElementById('carpetResult').innerHTML = `
-            Total Area: ${totalAreaSqft.toFixed(2)} sqft (${totalAreaSqYd.toFixed(2)} sq yd)<br>
-            Total Cost Before Tax: $${totalCostBeforeTax.toFixed(2)}<br>
-            Total Cost After Tax (13%): $${totalCostAfterTax.toFixed(2)}
-        `;
-    }
+            const inchesToDeduct = originalWidth - customWidth;
+            const inchesFromEachSide = inchesToDeduct / 2;
 
-    function calculateBlinds() {
-        const originalWidth = parseFloat(document.getElementById('originalWidth').value);
-        const desiredWidth = parseFloat(document.getElementById('desiredWidth').value);
-        
-        if (isNaN(originalWidth) || isNaN(desiredWidth) || originalWidth <= 0 || desiredWidth <= 0) {
-            document.getElementById('blindsResult').innerText = "Please enter valid positive numbers.";
-            return;
+            document.getElementById('blindResult').innerHTML = `
+                <h2>Results:</h2>
+                <p>Total Inches to be Deducted: <strong>${inchesToDeduct.toFixed(2)}</strong></p>
+                <p>Inches Deducted from Each Side: <strong>${inchesFromEachSide.toFixed(2)}</strong></p>
+            `;
         }
-
-        const totalDeduction = originalWidth - desiredWidth; // Total deduction needed
-        const deductionPerSide = totalDeduction / 2; // Deduction from each side
-
-        if (totalDeduction < 0) {
-            document.getElementById('blindsResult').innerText = "Desired width cannot be greater than original width.";
-            return;
-        }
-
-        document.getElementById('blindsResult').innerHTML = `
-            Total Deduction Needed: ${totalDeduction} inches<br>
-            Width to Deduct from Each Side: ${deductionPerSide} inches
-        `;
-    }
-</script>
-
+    </script>
 </body>
 </html>
