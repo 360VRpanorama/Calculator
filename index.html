@@ -112,8 +112,9 @@
             const extraBoxes = Math.ceil(baseNumberOfBoxes * 0.1);
             const totalBoxes = baseNumberOfBoxes + extraBoxes;
 
+            const baseCostBeforeTax = baseNumberOfBoxes * boxCost;
+            const baseCostAfterTax = baseCostBeforeTax * 1.13;
             const totalCostBeforeTax = totalBoxes * boxCost;
-
             const totalCostAfterTax = totalCostBeforeTax * 1.13;
 
             document.getElementById('floorResult').innerHTML = `
@@ -122,8 +123,13 @@
                 <p>Extra Boxes (10%): <span class="circle">${extraBoxes}</span></p>
                 <p>Total Boxes Needed: <span class="circle">${totalBoxes}</span></p>
 
-                <p>Total Cost Before Tax: <strong>$${totalCostBeforeTax.toFixed(2)}</strong></p>
-                <p>Total Cost After Tax (13%): <strong>$${totalCostAfterTax.toFixed(2)}</strong></p>
+                <h3>Cost Without Extra 10%:</h3>
+                <p>Cost Before Tax: <strong>$${baseCostBeforeTax.toFixed(2)}</strong></p>
+                <p>Cost After Tax (13%): <strong>$${baseCostAfterTax.toFixed(2)}</strong></p>
+
+                <h3>Cost With Extra 10%:</h3>
+                <p>Cost Before Tax: <strong>$${totalCostBeforeTax.toFixed(2)}</strong></p>
+                <p>Cost After Tax (13%): <strong>$${totalCostAfterTax.toFixed(2)}</strong></p>
             `;
         }
 
