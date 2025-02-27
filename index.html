@@ -108,13 +108,20 @@
             const boxCoverage = parseFloat(document.getElementById('boxCoverage').value);
             const boxCost = parseFloat(document.getElementById('boxCost').value);
 
-            const numberOfBoxes = Math.ceil(area / boxCoverage);
-            const totalCostBeforeTax = numberOfBoxes * boxCost;
+            const baseNumberOfBoxes = Math.ceil(area / boxCoverage);
+            const extraBoxes = Math.ceil(baseNumberOfBoxes * 0.1);
+            const totalBoxes = baseNumberOfBoxes + extraBoxes;
+
+            const totalCostBeforeTax = totalBoxes * boxCost;
+
             const totalCostAfterTax = totalCostBeforeTax * 1.13;
 
             document.getElementById('floorResult').innerHTML = `
                 <h2>Results:</h2>
-                <p>Number of Boxes Needed: <span class="circle">${numberOfBoxes}</span></p>
+                <p>Base Number of Boxes: <span class="circle">${baseNumberOfBoxes}</span></p>
+                <p>Extra Boxes (10%): <span class="circle">${extraBoxes}</span></p>
+                <p>Total Boxes Needed: <span class="circle">${totalBoxes}</span></p>
+
                 <p>Total Cost Before Tax: <strong>$${totalCostBeforeTax.toFixed(2)}</strong></p>
                 <p>Total Cost After Tax (13%): <strong>$${totalCostAfterTax.toFixed(2)}</strong></p>
             `;
